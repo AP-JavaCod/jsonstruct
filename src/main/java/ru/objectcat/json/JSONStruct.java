@@ -5,6 +5,7 @@ import org.json.simple.JSONArray;
 
 public class JSONStruct {
 
+	@Deprecated
 	public static JSONObject objectJSON(KeyValue... data) {
 		JSONObject json = new JSONObject();
 		for(KeyValue el : data) {
@@ -33,6 +34,7 @@ public class JSONStruct {
 		return value;
 	}
 	
+	@Deprecated
 	public record KeyValue(String key, Object value) {}
 	
 }

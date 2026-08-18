@@ -24,22 +24,20 @@ public class TestJsonStruct {
 		array.add("val1");
 		array.add("val2");
 		array.add("val3");
-		
 		json.put("values", array);
 	}
 	
-	
 	@Test
-	public void createJSON() {
-		JSONObject data = JSONStruct.objectJSON(
-				new JSONStruct.KeyValue("data", "info"),
-				new JSONStruct.KeyValue("user", JSONStruct.objectJSON(
-						new JSONStruct.KeyValue("name", "Tom"),
-						new JSONStruct.KeyValue("age", 12)
-						)),
-				new JSONStruct.KeyValue("values", JSONStruct.arrayJSON("val1", "val2", "val3"))
-				);
-		Assertions.assertEquals(json.toJSONString(), data.toJSONString());
+	public void builderJSON() {
+		JSONObject data = new JSONBuilder()
+				.put("data", "info")
+				.put("user", new JSONBuilder()
+						.put("name", "Tom")
+						.put("age", 12)
+						.build())
+				.put("values", JSONStruct.arrayJSON("val1", "val2", "val3"))
+				.build();
+		Assertions.assertEquals(json, data);
 	}
 	
 	@Test
