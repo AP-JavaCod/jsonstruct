@@ -4,18 +4,25 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Assertions;
 
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 public class TestJsonStruct {
 	
-	private JSONObject json = new JSONObject();
+	private org.json.simple.JSONObject json = new org.json.simple.JSONObject();
+	private JSONObject myJSON = new JSONBuilder()
+			.put("data", "info")
+			.put("user", new JSONBuilder()
+					.put("name", "Tom")
+					.put("age", 12)
+					.buildJSON())
+			.put("values", JSONStruct.arrayJSON("val1", "val2", "val3"))
+			.buildJSON();
 	
 	@BeforeEach
 	public void init() {
 		json.put("data", "info");
 		
-		JSONObject user = new JSONObject();
+		org.json.simple.JSONObject user = new org.json.simple.JSONObject();
 		user.put("name", "Tom");
 		user.put("age", 12);
 		json.put("user", user);
@@ -29,20 +36,12 @@ public class TestJsonStruct {
 	
 	@Test
 	public void builderJSON() {
-		JSONObject data = new JSONBuilder()
-				.put("data", "info")
-				.put("user", new JSONBuilder()
-						.put("name", "Tom")
-						.put("age", 12)
-						.build())
-				.put("values", JSONStruct.arrayJSON("val1", "val2", "val3"))
-				.build();
-		Assertions.assertEquals(json, data);
+		Assertions.assertEquals(json.toJSONString(), myJSON.toString());
 	}
 	
 	@Test
 	public void getName() {
-		Object object = JSONStruct.jsonValue(json, "user", "name");
+		Object object = myJSON.valueJSON("user", "name");
 		Assertions.assertEquals("Tom", object);
 	}
 

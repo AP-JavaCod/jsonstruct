@@ -1,11 +1,10 @@
 package ru.objectcat.json;
 
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 
 public class JSONBuilder {
 	
-	private final JSONObject JSON = new JSONObject();
+	private final org.json.simple.JSONObject JSON = new org.json.simple.JSONObject();
 	
 	public JSONBuilder put(String key, String value) {
 		return putObj(key, value);
@@ -39,6 +38,11 @@ public class JSONBuilder {
 		return putObj(key, value);
 	}
 	
+	@Deprecated
+	public JSONBuilder put(String key, org.json.simple.JSONObject value) {
+		return putObj(key, value);
+	}
+	
 	public JSONBuilder put(String key, JSONObject value) {
 		return putObj(key, value);
 	}
@@ -51,8 +55,13 @@ public class JSONBuilder {
 		return putObj(key, null);
 	}
 	
-	public JSONObject build() {
+	@Deprecated
+	public org.json.simple.JSONObject build() {
 		return JSON;
+	}
+	
+	public JSONObject buildJSON() {
+		return new JSONObject(JSON);
 	}
 	
 	private JSONBuilder putObj(String key, Object value) {
