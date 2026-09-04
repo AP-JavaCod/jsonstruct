@@ -40,7 +40,34 @@ public class JSONBuilder {
 	
 	@Deprecated
 	public JSONBuilder put(String key, org.json.simple.JSONObject value) {
-		return putObj(key, value);
+		JSONBuilder builder = new JSONBuilder();
+		for(Object i : value.keySet()) {
+			if(i instanceof String k) {
+				Object v = value.get(k);
+				if(
+						v == null ||
+						v instanceof String ||
+						v instanceof Byte ||
+						v instanceof Short ||
+						v instanceof Integer ||
+						v instanceof Long ||
+						v instanceof Float ||
+						v instanceof Double ||
+						v instanceof Boolean ||
+						v instanceof JSONObject ||
+						v instanceof JSONArray
+				) {
+					builder.putObj(k, v);
+				}else if(v instanceof org.json.simple.JSONObject e) {
+					builder.put(k, e);
+				}else {
+					throw new ClassCastException("Faild to convert to JSON type " + v.getClass());
+				}
+			}else {
+				throw new ClassCastException("Faild to convert to JSON type " + i.getClass());
+			}
+		}
+		return putObj(key, builder.buildJSON());
 	}
 	
 	public JSONBuilder put(String key, JSONObject value) {

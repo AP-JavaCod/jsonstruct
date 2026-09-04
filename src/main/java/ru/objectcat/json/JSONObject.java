@@ -43,15 +43,16 @@ public class JSONObject {
 				json += a.toJSONString();
 			}else if(value instanceof String str) {
 				json += "\"" + strJSON(str) + "\"";
+			}else {
+				throw new ClassCastException("Failed to convert to JSON type " + value.getClass());
 			}
 			if(i.hasNext()) {
 				json += ",";
 			}else {
 				isNext = false;
-				json += "}";
 			}
 		}
-		return json;
+		return json + "}";
 	}
 	
 	private String strJSON(String value) {
