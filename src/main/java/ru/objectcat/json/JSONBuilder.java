@@ -38,8 +38,11 @@ public class JSONBuilder {
 		return putObj(key, value);
 	}
 	
-	@Deprecated
 	public JSONBuilder put(String key, org.json.simple.JSONObject value) {
+		return putObj(key, value);
+	}
+	
+	public JSONBuilder putJSON(String key, org.json.simple.JSONObject value) {
 		JSONBuilder builder = new JSONBuilder();
 		for(Object i : value.keySet()) {
 			if(i instanceof String k) {
@@ -82,7 +85,6 @@ public class JSONBuilder {
 		return putObj(key, null);
 	}
 	
-	@Deprecated
 	public org.json.simple.JSONObject build() {
 		return JSON;
 	}

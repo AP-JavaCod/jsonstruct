@@ -34,6 +34,7 @@ public class JSONObject {
 					value instanceof Integer ||
 					value instanceof Long ||
 					value instanceof Float ||
+					value instanceof Double ||
 					value instanceof Boolean
 				) {
 				json += value;
@@ -60,11 +61,8 @@ public class JSONObject {
 		for(char el : value.toCharArray()) {
 			switch(el) {
 			case '\\':
-				str += "\\\\";
-				break;
 			case '\"':
-				str += "\\\"";
-				break;
+				str += "\\";
 			default:
 				str += el;
 			}

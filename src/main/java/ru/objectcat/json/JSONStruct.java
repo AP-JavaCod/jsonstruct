@@ -22,7 +22,6 @@ public class JSONStruct {
 		return array;
 	}
 	
-	@Deprecated
 	public static Object jsonValue(JSONObject json, String... pateh) {
 		Object value = json;
 		for(String el : pateh) {
