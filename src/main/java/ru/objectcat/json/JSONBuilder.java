@@ -2,6 +2,7 @@ package ru.objectcat.json;
 
 import org.json.simple.JSONArray;
 
+@Deprecated
 public class JSONBuilder {
 	
 	private final org.json.simple.JSONObject JSON = new org.json.simple.JSONObject();

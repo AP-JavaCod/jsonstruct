@@ -3,7 +3,6 @@ package ru.objectcat.json.parser;
 import org.json.simple.JSONArray;
 
 import ru.objectcat.json.JSONObject;
-import ru.objectcat.json.JSONBuilder;
 
 public class Parser {
 	
@@ -16,7 +15,7 @@ public class Parser {
 	}
 	
 	private static JSONValue<JSONObject> parsObject(String text) {
-		JSONBuilder json = new JSONBuilder();
+		JSONObject.Builder json = new JSONObject.Builder();
 		String element;
 		int end = 0;
 		int next = 0;
@@ -26,7 +25,7 @@ public class Parser {
 			JSONValue<String> key = parsString(text.substring(end));
 			end += key.index;
 			end += text.substring(end).indexOf(':') + 1;
-			JSONValue<Object> value = parsValue(text.substring(end));
+			JSONValue<?> value = parsValue(text.substring(end));
 			if(value.value == null) {
 				json.putNull(key.value);
 			}else if(value.value instanceof String s) {
@@ -47,7 +46,7 @@ public class Parser {
 			next = element.indexOf(',');
 			endObject = element.indexOf('}');
 		}while(next != -1 && next < endObject);
-		return new JSONValue<>(json.buildJSON(), end + endObject + 1);
+		return new JSONValue<>(json.build(), end + endObject + 1);
 	}
 	
 	private static JSONValue<JSONArray> parsArray(String text){
@@ -58,7 +57,7 @@ public class Parser {
 		int endArray;
 		do {
 			end += next + 1;
-			JSONValue<Object> value = parsValue(text.substring(end));
+			JSONValue<?> value = parsValue(text.substring(end));
 			json.add(value.value);
 			end += value.index;
 			element = text.substring(end);
@@ -108,27 +107,29 @@ public class Parser {
 		return new JSONValue<>(Double.parseDouble(value), index);
 	}
 	
-	private static JSONValue<Object> parsValue(String text) {
+	private static JSONValue<? extends Object> parsValue(String text) {
 		int end = 0;
 		for(char el : text.toCharArray()) {
 			if(el == '"') {
-				JSONValue<String> str = parsString(text.substring(end));
-				return new JSONValue<>(str.value, end + str.index);
+				return parsString(text.substring(end)).step(end);
 			}else if(el == '{') {
-				JSONValue<JSONObject> json = parsObject(text.substring(end));
-				return new JSONValue<>(json.value, end + json.index);
+				return parsObject(text.substring(end)).step(end);
 			}else if(el == '[') {
-				JSONValue<JSONArray> array = parsArray(text.substring(end));
-				return new JSONValue<>(array.value, end + array.index);
+				return parsArray(text.substring(end)).step(end);
 			}else if(el != ' ' && el != '\t' && el != '\n') {
-				JSONValue<Object> value = parsOther(text.substring(end));
-				return new JSONValue<>(value.value, end + value.index);
+				return parsOther(text.substring(end)).step(end);
 			}
 			end++;
 		}
 		return null;
 	}
 	
-	private record JSONValue<T>(T value, int index) {}
+	private record JSONValue<T>(T value, int index) {
+		
+		public JSONValue<T> step(int index){
+			return new JSONValue<>(value, this.index + index);
+		}
+		
+	}
 
 }

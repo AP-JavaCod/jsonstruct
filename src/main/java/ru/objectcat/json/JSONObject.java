@@ -81,5 +81,64 @@ public class JSONObject {
 			return null;	
 		}
 	}
+	
+	public static class Builder{
+		
+		private final Map<String, Object> MAP = new HashMap<>();
+		
+		public Builder put(String key, String value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, byte value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, short value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, int value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, long value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, float value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, double value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, boolean value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, JSONObject value) {
+			return putObj(key, value);
+		}
+		
+		public Builder put(String key, JSONArray value) {
+			return putObj(key, value);
+		}
+		
+		public Builder putNull(String key) {
+			return putObj(key, null);
+		}
+		
+		public JSONObject build() {
+			return new JSONObject(MAP);
+		}
+		
+		private Builder putObj(String key, Object value) {
+			MAP.put(key, value);
+			return this;
+		}
+		
+	}
 
 }

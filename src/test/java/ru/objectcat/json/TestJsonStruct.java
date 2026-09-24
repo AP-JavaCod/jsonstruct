@@ -9,14 +9,14 @@ import org.json.simple.JSONArray;
 public class TestJsonStruct {
 	
 	private org.json.simple.JSONObject json = new org.json.simple.JSONObject();
-	private JSONObject myJSON = new JSONBuilder()
+	private JSONObject myJSON = new JSONObject.Builder()
 			.put("data", "info")
-			.put("user", new JSONBuilder()
+			.put("user", new JSONObject.Builder()
 					.put("name", "Tom")
 					.put("age", 12)
-					.buildJSON())
+					.build())
 			.put("values", JSONStruct.arrayJSON("val1", "val2", "val3"))
-			.buildJSON();
+			.build();
 	
 	@BeforeEach
 	public void init() {
