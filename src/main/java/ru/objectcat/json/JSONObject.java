@@ -6,9 +6,17 @@ import java.util.Iterator;
 
 import org.json.simple.JSONArray;
 
+import ru.objectcat.json.parser.Parser;
+
 public class JSONObject {
 	
 	private final Map<String, Object> MAP = new HashMap<>();
+	
+	public JSONObject() {}
+	
+	public static JSONObject parse(String text) {
+		return Parser.parserObject(text);
+	}
 	
 	public JSONObject(Map<String, Object> map) {
 		MAP.putAll(map);
@@ -16,6 +24,50 @@ public class JSONObject {
 	
 	public Object valueJSON(String... path) {
 		return valueJSON(path, 0);
+	}
+	
+	public void put(String key, String value) {
+		MAP.put(key, value);
+	}
+	
+	public void put(String key, byte value) {
+		MAP.put(key, value);
+	}
+	
+	public void put(String key, short value) {
+		MAP.put(key, value);
+	}
+	
+	public void put(String key, int value) {
+		MAP.put(key, value);
+	}
+	
+	public void put(String key, long value) {
+		MAP.put(key, value);
+	}
+	
+	public void put(String key, float value) {
+		MAP.put(key, value);
+	}
+	
+	public void put(String key, double value) {
+		MAP.put(key, value);
+	}
+	
+	public void put(String key, boolean value) {
+		MAP.put(key, value);
+	}
+	
+	public void  put(String key, JSONObject value) {
+		MAP.put(key, value);
+	}
+	
+	public void put(String key, JSONArray value) {
+		MAP.put(key, value);
+	}
+	
+	public void putNull(String key) {
+		MAP.put(key, null);	
 	}
 	
 	@Override

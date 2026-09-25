@@ -15,7 +15,7 @@ public class Parser {
 	}
 	
 	private static JSONValue<JSONObject> parsObject(String text) {
-		JSONObject.Builder json = new JSONObject.Builder();
+		JSONObject json = new JSONObject();
 		String element;
 		int end = 0;
 		int next = 0;
@@ -40,13 +40,15 @@ public class Parser {
 				json.put(key.value, l);
 			}else if(value.value instanceof Double d) {
 				json.put(key.value, d);
+			}else {
+				throw new ClassCastException("Faild to convert to JSON type " + value.value.getClass());
 			}
 			end += value.index;
 			element = text.substring(end);
 			next = element.indexOf(',');
 			endObject = element.indexOf('}');
 		}while(next != -1 && next < endObject);
-		return new JSONValue<>(json.build(), end + endObject + 1);
+		return new JSONValue<>(json, end + endObject + 1);
 	}
 	
 	private static JSONValue<JSONArray> parsArray(String text){
