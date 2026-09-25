@@ -1,8 +1,7 @@
 package ru.objectcat.json.parser;
 
-import org.json.simple.JSONArray;
-
 import ru.objectcat.json.JSONObject;
+import ru.objectcat.json.JSONArray;
 
 public class Parser {
 	
@@ -60,7 +59,23 @@ public class Parser {
 		do {
 			end += next + 1;
 			JSONValue<?> value = parsValue(text.substring(end));
-			json.add(value.value);
+			if(value.value == null) {
+				json.addNull();
+			}else if(value.value instanceof String s) {
+				json.add(s);
+			}else if(value.value instanceof JSONObject o) {
+				json.add(o);
+			}else if(value.value instanceof JSONArray a) {
+				json.add(a);
+			}else if(value.value instanceof Boolean b) {
+				json.add(b);
+			}else if(value.value instanceof Long l) {
+				json.add(l);
+			}else if(value.value instanceof Double d) {
+				json.add(d);
+			}else {
+				throw new ClassCastException("Failed to convert to JSON type " + value.value.getClass());
+			}
 			end += value.index;
 			element = text.substring(end);
 			next = element.indexOf(',');

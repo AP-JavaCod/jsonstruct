@@ -3,10 +3,10 @@ package ru.objectcat.json;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import org.json.simple.JSONArray;
+import java.util.Set;
 
 import ru.objectcat.json.parser.Parser;
+import ru.objectcat.json.parser.JSONFormat;
 
 public class JSONObject {
 	
@@ -70,35 +70,19 @@ public class JSONObject {
 		MAP.put(key, null);	
 	}
 	
+	public Set<String> getKey(){
+		return MAP.keySet();
+	}
+	
 	@Override
 	public String toString() {
 		String json = "{";
 		Iterator<String> i = MAP.keySet().iterator();
 		boolean isNext = i.hasNext();
 		while(isNext) {
-			String key = strJSON(i.next());
-			json += "\"" + key + "\":";
+			String key = i.next();
 			Object value = MAP.get(key);
-			if(
-					value == null ||
-					value instanceof Byte ||
-					value instanceof Short ||
-					value instanceof Integer ||
-					value instanceof Long ||
-					value instanceof Float ||
-					value instanceof Double ||
-					value instanceof Boolean
-				) {
-				json += value;
-			}else if (value instanceof JSONObject v) {
-				json += v.toString();
-			}else if(value instanceof JSONArray a) {
-				json += a.toJSONString();
-			}else if(value instanceof String str) {
-				json += "\"" + strJSON(str) + "\"";
-			}else {
-				throw new ClassCastException("Failed to convert to JSON type " + value.getClass());
-			}
+			json += JSONFormat.formatString(key) + ":" + JSONFormat.formatValue(value);
 			if(i.hasNext()) {
 				json += ",";
 			}else {
@@ -106,20 +90,6 @@ public class JSONObject {
 			}
 		}
 		return json + "}";
-	}
-	
-	private String strJSON(String value) {
-		String str = "";
-		for(char el : value.toCharArray()) {
-			switch(el) {
-			case '\\':
-			case '\"':
-				str += "\\";
-			default:
-				str += el;
-			}
-		}
-		return str;
 	}
 	
 	private Object valueJSON(String[] path, int index) {
