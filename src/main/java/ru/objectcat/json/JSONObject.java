@@ -14,12 +14,16 @@ public class JSONObject {
 	
 	public JSONObject() {}
 	
-	public static JSONObject parse(String text) {
-		return Parser.parserObject(text);
+	public JSONObject(JSONObject json) {
+		MAP.putAll(json.MAP);
 	}
 	
-	public JSONObject(Map<String, Object> map) {
+	private JSONObject(Map<String, Object> map) {
 		MAP.putAll(map);
+	}
+	
+	public static JSONObject parse(String text) {
+		return Parser.parserObject(text);
 	}
 	
 	public Object valueJSON(String... path) {

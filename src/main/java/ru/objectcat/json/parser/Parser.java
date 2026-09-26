@@ -21,7 +21,12 @@ public class Parser {
 		int endObject;
 		do {
 			end += next + 1;
-			JSONValue<String> key = parsString(text.substring(end));
+			String keyVal = text.substring(end);
+			endObject = keyVal.indexOf('}');
+			if(keyVal.indexOf('"') > endObject) {
+				break;
+			}
+			JSONValue<String> key = parsString(keyVal);
 			end += key.index;
 			end += text.substring(end).indexOf(':') + 1;
 			JSONValue<?> value = parsValue(text.substring(end));
@@ -59,7 +64,10 @@ public class Parser {
 		do {
 			end += next + 1;
 			JSONValue<?> value = parsValue(text.substring(end));
-			if(value.value == null) {
+			if(value.index == -1) {
+				endArray = text.substring(end).indexOf(']');
+				break;
+			}else if(value.value == null) {
 				json.addNull();
 			}else if(value.value instanceof String s) {
 				json.add(s);
@@ -104,7 +112,7 @@ public class Parser {
 		String value = "";
 		int index = 0;
 		for(char el : text.toCharArray()) {
-			if(el == ' ' || el == '\t' || el == '\n' || el == ',' || el == '}' || el == ']') {
+			if(el == ' ' || el == '\t' || el == '\n' || el == ',' || el == '}' || el == ']' || el == '\r') {
 				break;
 			}
 			value += el;
@@ -133,6 +141,8 @@ public class Parser {
 				return parsObject(text.substring(end)).step(end);
 			}else if(el == '[') {
 				return parsArray(text.substring(end)).step(end);
+			}else if(el == ']' || el == '}') {
+				return new JSONValue<>(null, -1);
 			}else if(el != ' ' && el != '\t' && el != '\n') {
 				return parsOther(text.substring(end)).step(end);
 			}
