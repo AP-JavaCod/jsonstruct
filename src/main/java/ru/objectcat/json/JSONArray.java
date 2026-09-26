@@ -4,11 +4,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
+import ru.objectcat.json.parser.Parser;
 import ru.objectcat.json.parser.JSONFormat;
 
 public class JSONArray {
 
 	private final List<Object> LIST = new ArrayList<>();
+	
+	public JSONArray parse(String text) {
+		return Parser.parserArray(text);
+	}
 	
 	public void add(String string) {
 		LIST.add(string);

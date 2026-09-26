@@ -1,8 +1,7 @@
 package ru.objectcat.json.parser;
 
-import org.json.simple.JSONArray;
-
 import ru.objectcat.json.JSONObject;
+import ru.objectcat.json.JSONArray;
 
 public class JSONFormat {
 	
@@ -36,7 +35,7 @@ public class JSONFormat {
 	}
 	
 	public static String formatArray(JSONArray value) {
-		return value.toJSONString();
+		return value.toString();
 	}
 	
 	public static String formatOther(Object value) {
