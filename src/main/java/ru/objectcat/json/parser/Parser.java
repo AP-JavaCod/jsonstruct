@@ -15,18 +15,18 @@ public class Parser {
 	
 	private static JSONValue<JSONObject> parsObject(String text) {
 		JSONObject json = new JSONObject();
+		int startKey = text.indexOf('"');
+		int stopObject = text.indexOf('}');
+		if(startKey == -1 || startKey > stopObject) {
+			return new JSONValue<>(json, stopObject + 1);
+		}
 		String element;
 		int end = 0;
 		int next = 0;
 		int endObject;
 		do {
 			end += next + 1;
-			String keyVal = text.substring(end);
-			endObject = keyVal.indexOf('}');
-			if(keyVal.indexOf('"') > endObject) {
-				break;
-			}
-			JSONValue<String> key = parsString(keyVal);
+			JSONValue<String> key = parsString(text.substring(end));
 			end += key.index;
 			end += text.substring(end).indexOf(':') + 1;
 			JSONValue<?> value = parsValue(text.substring(end));
@@ -57,17 +57,10 @@ public class Parser {
 	
 	private static JSONValue<JSONArray> parsArray(String text){
 		JSONArray json =  new JSONArray();
-		String element;
-		int end = 0;
-		int next = 0;
-		int endArray;
-		do {
-			end += next + 1;
-			JSONValue<?> value = parsValue(text.substring(end));
-			if(value.index == -1) {
-				endArray = text.substring(end).indexOf(']');
-				break;
-			}else if(value.value == null) {
+		int end = 1;
+		JSONValue<?> value = parsValue(text.substring(end));
+		while(value.index != -1) {
+			if(value.value == null) {
 				json.addNull();
 			}else if(value.value instanceof String s) {
 				json.add(s);
@@ -82,14 +75,18 @@ public class Parser {
 			}else if(value.value instanceof Double d) {
 				json.add(d);
 			}else {
-				throw new ClassCastException("Failed to convert to JSON type " + value.value.getClass());
+				throw new ClassCastException("Failed to convert to JSON type " + value.value.toString());
 			}
 			end += value.index;
-			element = text.substring(end);
-			next = element.indexOf(',');
-			endArray = element.indexOf(']');
-		}while(next != -1 && next < endArray);
-		return new JSONValue<>(json, end + endArray + 1);
+			String nextElement = text.substring(end);
+			int next = nextElement.indexOf(',');
+			if(next == -1 || next > nextElement.indexOf(']')) {
+				break;
+			}
+			end += next + 1;
+			value = parsValue(text.substring(end));
+		}
+		return new JSONValue<>(json, end + text.substring(end).indexOf(']') + 1);
 	}
 	
 	private static JSONValue<String> parsString(String text){
@@ -143,7 +140,7 @@ public class Parser {
 				return parsArray(text.substring(end)).step(end);
 			}else if(el == ']' || el == '}') {
 				return new JSONValue<>(null, -1);
-			}else if(el != ' ' && el != '\t' && el != '\n') {
+			}else if(el != ' ' && el != '\t' && el != '\n' && el != '\r') {
 				return parsOther(text.substring(end)).step(end);
 			}
 			end++;

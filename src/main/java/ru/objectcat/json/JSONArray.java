@@ -11,7 +11,7 @@ public class JSONArray {
 
 	private final List<Object> LIST = new ArrayList<>();
 	
-	public JSONArray parse(String text) {
+	public static JSONArray parse(String text) {
 		return Parser.parserArray(text);
 	}
 	
