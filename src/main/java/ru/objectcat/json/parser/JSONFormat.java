@@ -51,7 +51,21 @@ public class JSONFormat {
 			) {
 			return String.valueOf(value);
 		}
-		throw new ClassCastException("Failed to convert to JSON type " + value.toString());
+		throw new ClassCastException("Failed to convert to JSON type " + value.getClass());
+	}
+	
+	public static boolean isValide(Object value) {
+		return value == null ||
+				value instanceof String ||
+				value instanceof JSONObject ||
+				value instanceof JSONArray ||
+				value instanceof Byte ||
+				value instanceof Short ||
+				value instanceof Integer ||
+				value instanceof Long ||
+				value instanceof Float ||
+				value instanceof Double ||
+				value instanceof Boolean;
 	}
 
 }

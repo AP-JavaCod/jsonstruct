@@ -15,46 +15,14 @@ public class JSONArray {
 		return Parser.parserArray(text);
 	}
 	
-	public void add(String string) {
-		LIST.add(string);
-	}
-	
-	public void add(byte value) {
+	public void add(Object value) {
+		if(!JSONFormat.isValide(value)) {
+			throw new ClassCastException("Failed to convert to JSON type " + value.getClass());	
+		}
 		LIST.add(value);
 	}
 	
-	public void add(short value) {
-		LIST.add(value);
-	}
-	
-	public void add(int value) {
-		LIST.add(LIST);
-	}
-	
-	public void add(long value) {
-		LIST.add(value);
-	}
-	
-	public void add(float value) {
-		LIST.add(value);
-	}
-	
-	public void add(double value) {
-		LIST.add(value);
-	}
-	
-	public void add(boolean value) {
-		LIST.add(value);
-	}
-	
-	public void add(JSONObject value) {
-		LIST.add(value);
-	}
-	
-	public void add(JSONArray value) {
-		LIST.add(value);
-	}
-	
+	@Deprecated
 	public void addNull() {
 		LIST.add(null);	
 	}

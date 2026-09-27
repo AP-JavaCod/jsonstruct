@@ -30,46 +30,14 @@ public class JSONObject {
 		return valueJSON(path, 0);
 	}
 	
-	public void put(String key, String value) {
+	public void put(String key, Object value) {
+		if(!JSONFormat.isValide(value)){
+			throw new ClassCastException("Failed to convert to JSON type " + value.getClass());
+		}
 		MAP.put(key, value);
 	}
 	
-	public void put(String key, byte value) {
-		MAP.put(key, value);
-	}
-	
-	public void put(String key, short value) {
-		MAP.put(key, value);
-	}
-	
-	public void put(String key, int value) {
-		MAP.put(key, value);
-	}
-	
-	public void put(String key, long value) {
-		MAP.put(key, value);
-	}
-	
-	public void put(String key, float value) {
-		MAP.put(key, value);
-	}
-	
-	public void put(String key, double value) {
-		MAP.put(key, value);
-	}
-	
-	public void put(String key, boolean value) {
-		MAP.put(key, value);
-	}
-	
-	public void  put(String key, JSONObject value) {
-		MAP.put(key, value);
-	}
-	
-	public void put(String key, JSONArray value) {
-		MAP.put(key, value);
-	}
-	
+	@Deprecated
 	public void putNull(String key) {
 		MAP.put(key, null);	
 	}
@@ -112,57 +80,21 @@ public class JSONObject {
 		
 		private final Map<String, Object> MAP = new HashMap<>();
 		
-		public Builder put(String key, String value) {
-			return putObj(key, value);
+		public Builder put(String key, Object value) {
+			if(!JSONFormat.isValide(value)) {
+				throw new ClassCastException("Failed to convert to JSON type " + value.getClass());
+			}
+			MAP.put(key, value);
+			return this;
 		}
 		
-		public Builder put(String key, byte value) {
-			return putObj(key, value);
-		}
-		
-		public Builder put(String key, short value) {
-			return putObj(key, value);
-		}
-		
-		public Builder put(String key, int value) {
-			return putObj(key, value);
-		}
-		
-		public Builder put(String key, long value) {
-			return putObj(key, value);
-		}
-		
-		public Builder put(String key, float value) {
-			return putObj(key, value);
-		}
-		
-		public Builder put(String key, double value) {
-			return putObj(key, value);
-		}
-		
-		public Builder put(String key, boolean value) {
-			return putObj(key, value);
-		}
-		
-		public Builder put(String key, JSONObject value) {
-			return putObj(key, value);
-		}
-		
-		public Builder put(String key, JSONArray value) {
-			return putObj(key, value);
-		}
-		
+		@Deprecated
 		public Builder putNull(String key) {
-			return putObj(key, null);
+			return put(key, null);
 		}
 		
 		public JSONObject build() {
 			return new JSONObject(MAP);
-		}
-		
-		private Builder putObj(String key, Object value) {
-			MAP.put(key, value);
-			return this;
 		}
 		
 	}
