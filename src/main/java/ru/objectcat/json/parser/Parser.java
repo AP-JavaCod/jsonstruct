@@ -30,23 +30,7 @@ public class Parser {
 			end += key.index;
 			end += text.substring(end).indexOf(':') + 1;
 			JSONValue<?> value = parsValue(text.substring(end));
-			if(value.value == null) {
-				json.putNull(key.value);
-			}else if(value.value instanceof String s) {
-				json.put(key.value, s);
-			}else if(value.value instanceof JSONObject o){
-				json.put(key.value, o);
-			}else if(value.value instanceof JSONArray a){
-				json.put(key.value, a);
-			}else if(value.value instanceof Boolean b){
-				json.put(key.value, b);
-			}else if(value.value instanceof Long l) {
-				json.put(key.value, l);
-			}else if(value.value instanceof Double d) {
-				json.put(key.value, d);
-			}else {
-				throw new ClassCastException("Faild to convert to JSON type " + value.value.getClass());
-			}
+			json.put(key.value, value.value);
 			end += value.index;
 			element = text.substring(end);
 			next = element.indexOf(',');
@@ -60,23 +44,7 @@ public class Parser {
 		int end = 1;
 		JSONValue<?> value = parsValue(text.substring(end));
 		while(value.index != -1) {
-			if(value.value == null) {
-				json.addNull();
-			}else if(value.value instanceof String s) {
-				json.add(s);
-			}else if(value.value instanceof JSONObject o) {
-				json.add(o);
-			}else if(value.value instanceof JSONArray a) {
-				json.add(a);
-			}else if(value.value instanceof Boolean b) {
-				json.add(b);
-			}else if(value.value instanceof Long l) {
-				json.add(l);
-			}else if(value.value instanceof Double d) {
-				json.add(d);
-			}else {
-				throw new ClassCastException("Failed to convert to JSON type " + value.value.toString());
-			}
+			json.add(value.value);
 			end += value.index;
 			String nextElement = text.substring(end);
 			int next = nextElement.indexOf(',');
