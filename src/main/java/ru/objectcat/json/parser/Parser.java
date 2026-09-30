@@ -14,34 +14,30 @@ public class Parser {
 	}
 	
 	private static JSONValue<JSONObject> parsObject(String text) {
-		JSONObject json = new JSONObject();
-		int startKey = text.indexOf('"');
-		int stopObject = text.indexOf('}');
-		if(startKey == -1 || startKey > stopObject) {
-			return new JSONValue<>(json, stopObject + 1);
-		}
-		String element;
-		int end = 0;
-		int next = 0;
-		int endObject;
-		do {
-			end += next + 1;
-			JSONValue<String> key = parsString(text.substring(end));
-			end += key.index;
+		JSONObject json = new JSONObject();	
+		int end = text.indexOf('{') + 1;
+		JSONValue<?> obj = parsValue(text.substring(end));
+		while(obj.index != -1) {
+			String key = (String)obj.value;
+			end += obj.index;
 			end += text.substring(end).indexOf(':') + 1;
 			JSONValue<?> value = parsValue(text.substring(end));
-			json.put(key.value, value.value);
+			json.put(key, value.value);
 			end += value.index;
-			element = text.substring(end);
-			next = element.indexOf(',');
-			endObject = element.indexOf('}');
-		}while(next != -1 && next < endObject);
-		return new JSONValue<>(json, end + endObject + 1);
+			String nextElement = text.substring(end);
+			int next = nextElement.indexOf(',');
+			if(next == -1 || next > nextElement.indexOf('}')) {
+				break;
+			}
+			end += next + 1;
+			obj = parsValue(text.substring(end));
+		}
+		return new JSONValue<>(json, end + text.substring(end).indexOf('}') + 1);
 	}
 	
 	private static JSONValue<JSONArray> parsArray(String text){
 		JSONArray json =  new JSONArray();
-		int end = 1;
+		int end = text.indexOf('[') + 1;
 		JSONValue<?> value = parsValue(text.substring(end));
 		while(value.index != -1) {
 			json.add(value.value);

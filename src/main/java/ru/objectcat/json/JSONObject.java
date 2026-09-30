@@ -62,20 +62,18 @@ public class JSONObject extends HashMap<String, Object>{
 	}
 	
 	private Object valueJSON(String[] path, int index) {
-		if(index == path.length - 1) {
-			return get(path[index]);
-		}
 		Object map = get(path[index]);
-		if(map instanceof JSONObject next) {
+		if(index == path.length - 1) {
+			return map;
+		}else if(map instanceof JSONObject next) {
 			return next.valueJSON(path, index + 1);	
-		}else {
-			return null;	
 		}
+		return null;
 	}
 	
 	public static class Builder{
 		
-		private final Map<String, Object> MAP = new HashMap<>();
+		private final JSONObject MAP = new JSONObject();
 		
 		public Builder put(String key, Object value) {
 			if(!JSONFormat.isValide(value)) {
@@ -91,7 +89,7 @@ public class JSONObject extends HashMap<String, Object>{
 		}
 		
 		public JSONObject build() {
-			return new JSONObject(MAP);
+			return MAP;
 		}
 		
 	}
