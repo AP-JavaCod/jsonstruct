@@ -23,6 +23,11 @@ public class JSONObject extends HashMap<String, Object> implements Iterable<JSON
 		return valueJSON(path, 0);
 	}
 	
+
+	public Object abb(KeyValue value) {
+		return put(value.KEY, value.VALUE);
+	}
+	
 	@Override
 	public Object put(String key, Object value) {
 		if(!JSONFormat.isValide(value)){
@@ -54,8 +59,7 @@ public class JSONObject extends HashMap<String, Object> implements Iterable<JSON
 		Iterator<KeyValue> i = iterator();
 		boolean isNext = i.hasNext();
 		while(isNext) {
-			KeyValue value = i.next();
-			json += JSONFormat.formatString(value.KEY) + ":" + JSONFormat.formatValue(value.VALUE);
+			json += i.next().toString();
 			if(i.hasNext()) {
 				json += ",";
 			}else {
@@ -72,9 +76,8 @@ public class JSONObject extends HashMap<String, Object> implements Iterable<JSON
 		Object map = get(path[index]);
 		if(map instanceof JSONObject next) {
 			return next.valueJSON(path, index + 1);	
-		}else {
-			return null;	
 		}
+		return null;	
 	}
 	
 	public static class Builder{
@@ -122,6 +125,15 @@ public class JSONObject extends HashMap<String, Object> implements Iterable<JSON
 		
 	}
 	
-	public static record KeyValue(String KEY, Object VALUE) {}
+	public static record KeyValue(String KEY, Object VALUE) {
+		
+		@Override
+		public String toString() {
+			String key = JSONFormat.formatString(KEY);
+			String value = JSONFormat.formatValue(VALUE);
+			return key + ":" + value;
+		}
+		
+	}
 
 }
