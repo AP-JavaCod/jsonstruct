@@ -1,7 +1,10 @@
 package ru.objectcat.json.parser;
 
+import java.util.Iterator;
+
 import ru.objectcat.json.JSONObject;
 import ru.objectcat.json.JSONArray;
+import ru.objectcat.json.JSONUniqueArray;
 
 public class JSONFormat {
 	
@@ -12,6 +15,8 @@ public class JSONFormat {
 			return formatObject(json);
 		}else if(value instanceof JSONArray array) {
 			return formatArray(array);
+		}else if(value instanceof JSONUniqueArray un) {
+			return formatArray(un);
 		}
 		return formatOther(value);
 	}
@@ -35,7 +40,11 @@ public class JSONFormat {
 	}
 	
 	public static String formatArray(JSONArray value) {
-		return value.toString();
+		return formatArray(value.iterator());
+	}
+	
+	public static String formatArray(JSONUniqueArray value) {
+		return formatArray(value.iterator());
 	}
 	
 	public static String formatOther(Object value) {
@@ -59,6 +68,7 @@ public class JSONFormat {
 				value instanceof String ||
 				value instanceof JSONObject ||
 				value instanceof JSONArray ||
+				value instanceof JSONUniqueArray ||
 				value instanceof Byte ||
 				value instanceof Short ||
 				value instanceof Integer ||
@@ -66,6 +76,21 @@ public class JSONFormat {
 				value instanceof Float ||
 				value instanceof Double ||
 				value instanceof Boolean;
+	}
+	
+	private static String formatArray(Iterator<Object> iterator) {
+		String array = "[";
+		boolean isNext = iterator.hasNext();
+		while(isNext) {
+			Object value = iterator.next();
+			array += formatValue(value);
+			if(iterator.hasNext()) {
+				array += ",";
+			}else {
+				isNext = false;
+			}
+		}
+		return array + "]";
 	}
 
 }

@@ -7,7 +7,7 @@ import java.util.Iterator;
 import ru.objectcat.json.parser.Parser;
 import ru.objectcat.json.parser.JSONFormat;
 
-public class JSONObject extends HashMap<String, Object>{
+public class JSONObject extends HashMap<String, Object> implements Iterable<JSONObject.KeyValue>{
 	
 	public JSONObject() {}
 	
@@ -21,6 +21,11 @@ public class JSONObject extends HashMap<String, Object>{
 	
 	public Object valueJSON(String... path) {
 		return valueJSON(path, 0);
+	}
+	
+
+	public Object abb(KeyValue value) {
+		return put(value.KEY, value.VALUE);
 	}
 	
 	@Override
@@ -44,14 +49,17 @@ public class JSONObject extends HashMap<String, Object>{
 	}
 	
 	@Override
+	public Iterator<KeyValue> iterator(){
+		return new JSONObjectIterator(keySet().iterator());
+	}
+	
+	@Override
 	public String toString() {
 		String json = "{";
-		Iterator<String> i = keySet().iterator();
+		Iterator<KeyValue> i = iterator();
 		boolean isNext = i.hasNext();
 		while(isNext) {
-			String key = i.next();
-			Object value = get(key);
-			json += JSONFormat.formatString(key) + ":" + JSONFormat.formatValue(value);
+			json += i.next().toString();
 			if(i.hasNext()) {
 				json += ",";
 			}else {
@@ -90,6 +98,39 @@ public class JSONObject extends HashMap<String, Object>{
 		
 		public JSONObject build() {
 			return MAP;
+		}
+		
+	}
+	
+	private class JSONObjectIterator implements Iterator<KeyValue>{
+		
+		private final Iterator<String> KEY;
+		
+		private JSONObjectIterator(Iterator<String> iterator) {
+			KEY = iterator;
+		}
+		
+		@Override
+		public boolean hasNext() {
+			return KEY.hasNext();
+		}
+		
+		@Override
+		public KeyValue next() {
+			String key = KEY.next();
+			Object value = JSONObject.this.get(key);
+			return new KeyValue(key, value);
+		}
+		
+	}
+	
+	public static record KeyValue(String KEY, Object VALUE) {
+		
+		@Override
+		public String toString() {
+			String key = JSONFormat.formatString(KEY);
+			String value = JSONFormat.formatValue(VALUE);
+			return key + ":" + value;
 		}
 		
 	}

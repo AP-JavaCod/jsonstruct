@@ -1,6 +1,5 @@
 package ru.objectcat.json;
 
-import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -63,19 +62,7 @@ public class JSONArray extends ArrayList<Object>{
 	
 	@Override
 	public String toString() {
-		String array = "[";
-		Iterator<Object> i = iterator();
-		boolean isNext = i.hasNext();
-		while(isNext) {
-			Object value = i.next();
-			array += JSONFormat.formatValue(value);
-			if(i.hasNext()) {
-				array += ",";
-			}else {
-				isNext = false;
-			}
-		}
-		return array + "]";
+		return JSONFormat.formatArray(this);
 	}
 	
 }
