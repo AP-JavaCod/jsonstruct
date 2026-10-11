@@ -1,0 +1,6 @@
+[submodule "json-base"]
+	path = json-base
+	url = D:/program/coder/jsonstruct/json-base
+[submodule "json-creater"]
+	path = json-creater
+	url = D:/program/coder/jsonstruct/json-creater
