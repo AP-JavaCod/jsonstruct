@@ -1,0 +1,127 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>ru.object-cat.jsonstruct</groupId>
+  <artifactId>jsonstruct</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  
+  <name>JSON-Struct</name>
+  <description>JSON parser</description>
+  <url>https://github.com/AP-JavaCod/jsonstruct.git</url>
+  
+  <developers>
+  	<developer>
+  		<name>AP-JavaCod</name>
+  		<email>megafoh3g@gmail.com</email>
+  		<organization>AP-JavaCod</organization>
+  		<organizationUrl>https://github.com/AP-JavaCod</organizationUrl>
+  	</developer>
+  </developers>
+  
+  <scm>
+  	<connection>scm:git:git://github.com/AP-JavaCod/jsonstruct.git</connection>
+  	<developerConnection>scm:git:git://github.com:AP-JavaCod/jsonstruct.git</developerConnection>
+  	<url>https://github.com/AP-JavaCod/jsonstruct.git</url>
+  </scm>
+  
+  <modules>
+  	<module>json-base</module>
+  	<module>json-creater</module>
+  </modules>
+  
+  <build>
+  	<pluginManagement>
+  		<plugins>
+  			<plugin>
+  				<groupId>org.apache.maven.plugins</groupId>
+  				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.15.0</version>
+				<configuration>
+					<release>17</release>
+				</configuration>
+  			</plugin>
+  		</plugins>
+  	</pluginManagement>
+  	<plugins>
+  		<plugin>
+  			<groupId>org.sonatype.central</groupId>
+  			<artifactId>central-publishing-maven-plugin</artifactId>
+  			<version>0.12.0</version>
+  			<extensions>true</extensions>
+  			<executions>
+  				<execution>
+  					<id>central-deploy</id>
+  					<phase>deploy</phase>
+  					<goals>
+  						<goal>publish</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  			<configuration>
+  				<publishingServerId>central</publishingServerId>
+  				<autoPublish>false</autoPublish>
+  			</configuration>
+  		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-source-plugin</artifactId>
+  			<version>3.3.1</version>
+  			<executions>
+  				<execution>
+  					<id>attach-sources</id>
+  					<goals>
+  						<goal>jar-no-fork</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-javadoc-plugin</artifactId>
+  			<version>3.6.3</version>
+  			<executions>
+  				<execution>
+  					<id>attach-javadocs</id>
+  					<goals>
+  						<goal>jar</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-gpg-plugin</artifactId>
+  			<version>3.2.7</version>
+  			<executions>
+  				<execution>
+  					<id>sign-artifacts</id>
+  					<phase>verify</phase>
+  					<goals>
+  						<goal>sign</goal>
+  					</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
+  		<plugin>
+  			<groupId>org.apache.maven.plugins</groupId>
+  			<artifactId>maven-deploy-plugin</artifactId>
+			<version>3.2.0</version>
+			<configuration>
+				<skip>true</skip>
+			</configuration>
+  		</plugin>
+  	</plugins>
+  </build>
+  
+  <licenses>
+  	<license>
+  		<name>Apache License, version 2.0</name>
+  		<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+  		<distribution>repo</distribution>
+  	</license>
+  </licenses>
+  
+</project>
